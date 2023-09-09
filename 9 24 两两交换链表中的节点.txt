@@ -1,0 +1,40 @@
+上一道题的强化版。还是双指针法。要注意的是，对换的两个结点，要改变的指针还有左边节点上一个节点的指针。所以双指针应该指向左边节点的上一个节点，以及左边节点。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* tmp_head = new ListNode(0,head);
+        ListNode* left = tmp_head;
+        ListNode* right = head;
+        if(head == nullptr) {
+            return head;
+        }
+        while(right != nullptr) {
+            if(right->next == nullptr) {
+                head = tmp_head->next;
+                delete(tmp_head);
+                return head;
+            }
+            else {
+                left->next = right->next;
+                right->next = left->next->next;
+                left->next->next = right;
+                left = right;
+                right = left->next;
+            }
+        }
+        head = tmp_head->next;
+        delete(tmp_head);
+        return head;
+    }
+};

@@ -1,0 +1,38 @@
+基础，做二分查找就是，题解用的while循环，我用的递归。
+熟悉下vector用法
+
+
+class Solution {
+public:
+    int search_way(vector<int>& nums, int target,int left,int right){
+        int mid_a=(left+right)/2;
+        if(left>right){
+            cout<<"error-left bigger than right";
+            return -1;
+        }
+        else if(left==right){
+            if(target==nums[left]){
+                return left;
+            }
+            else return -1;
+        }
+        else{
+            
+            if(target>nums[mid_a]){
+                return search_way(nums,target,mid_a+1,right);
+            }
+            else if(target<nums[mid_a]){
+                return search_way(nums,target,left,mid_a-1);
+            }
+            else {
+                return mid_a;
+            }
+        }
+    }
+    int search(vector<int>& nums, int target) {
+        int ans=0;
+        int len = nums.size();
+        
+        return search_way(nums,target,0,len-1);
+    }
+};

@@ -1,0 +1,30 @@
+废案：对于测试案例中一个需要10000长度的结果超出内存限制
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int len = nums.size();
+        cout << "len=" << len << endl;
+        int **siz = new int *[len];
+        for(int i = 0; i < len; ++i){
+            siz[i]= new int[len];
+        }
+        for(int i = 0; i < len; ++i){
+            siz[0][i] = nums[i];
+            cout << "siz[0][" << i << "]=" << siz[0][i] << endl;
+            if(nums[i] >= target){
+                return 1;
+            }
+        }
+        for(int i = 1; i < len; ++i){
+            for(int j = 0; j < len-i; ++j){
+                siz[i][j] = siz[i-1][j] + nums[j+i];
+                cout << "siz[" << i << "][" << j << "]=" << siz[i][j] << endl;
+                if(siz[i][j] >= target){
+                    return i+1;
+                }
+            }
+        }
+        return 0;
+    }
+};

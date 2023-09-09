@@ -1,0 +1,63 @@
+快慢指针法。自己想出来的，快指针一次走2步，慢指针一次走1步，只要有环一定会遇到。第一次遇到后，再走一遍到第二次遇到，中间计数，走过的回合数就是环的点个数。于是重新从head开始快慢指针，快指针先走count步，慢指针才动，当相遇时的节点就是尾指针指向的节点。
+题解的第一次相遇后，求环点的方法是用的数学公式，再得的一个结论。于是从第一次相遇点，和head重新开始两个一步一步走的指针，遇到的位置就是环点。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int CircleLen(ListNode *start) {
+        int count = 0;
+        bool stp = 0;
+        ListNode* fast = start;
+        ListNode* slow = start;
+        while(stp == 0) {
+            fast = fast->next->next;
+            slow = slow->next;
+            count++;
+            if(fast == slow) {
+                stp = 1;
+            }
+        }
+        return count;
+    }
+    ListNode *detectCycle(ListNode *head) {
+        int Len = 0;
+        ListNode* fast = head;
+        ListNode* slow = head;
+        
+        while(fast != NULL && slow != NULL && Len == 0) {
+            if(fast->next != NULL) {
+                if(fast->next->next != NULL) {
+                    fast = fast->next->next;
+                    slow = slow->next;
+                    if(fast == slow) {
+                        Len = CircleLen(fast);
+                    }
+                }
+                else {
+                    return NULL;
+                }
+            }
+            else {
+                return NULL;
+            }            
+        }
+        fast = head;
+        slow = head;
+        while(Len > 0) {
+            fast = fast->next;
+            Len--;
+        }
+        while(fast != slow) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        return fast;
+    }
+};

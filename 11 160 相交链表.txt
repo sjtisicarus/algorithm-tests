@@ -1,0 +1,65 @@
+上一题的变种，就是快慢指针法。
+确定快慢指针的差额，然后移动指针直到移到相交点。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* tmpa = headA;
+        ListNode* tmpb = headB;
+        int lena = 0;
+        int lenb = 0;
+        int dif = 0;
+        while(tmpa != NULL) {
+            tmpa = tmpa->next;
+            lena++;
+        }
+        while(tmpb != NULL) {
+            tmpb = tmpb->next;
+            lenb++;
+        }
+        tmpa = headA;
+        tmpb = headB;
+        if(lena > lenb) {
+            dif = lena - lenb;
+            while(dif > 0) {
+                tmpa = tmpa->next;
+                dif--;
+            }
+            while(tmpa != NULL && tmpb != NULL) {
+                if(tmpa == tmpb) {
+                    return tmpa;
+                }
+                else {
+                    tmpa = tmpa->next;
+                    tmpb = tmpb->next;
+                }
+            }
+            return NULL;
+        }
+        else {
+            dif = lenb - lena;
+            while(dif > 0) {
+                tmpb = tmpb->next;
+                dif--;
+            }
+            while(tmpa != NULL && tmpb != NULL) {
+                if(tmpa == tmpb) {
+                    return tmpa;
+                }
+                else {
+                    tmpa = tmpa->next;
+                    tmpb = tmpb->next;
+                }
+            }
+            return NULL;
+        }
+    }
+};

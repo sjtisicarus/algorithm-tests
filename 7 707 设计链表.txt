@@ -1,0 +1,114 @@
+掌握类的定义，链表的构造。
+
+struct Node{
+    int val;
+    Node* next;
+    Node() {
+        val = 0;
+        next = nullptr;
+    };
+    Node(int x) {
+        val = x;
+        next = nullptr;
+    };
+    Node(int x, Node* a) {
+        val = x;
+        next = a;
+    }
+};
+
+class MyLinkedList {
+public:
+    int len;
+    Node* head;
+    Node* tmp;
+    Node* t2;
+    MyLinkedList() {
+        //cout << "My start" << endl;
+        len = 0;
+        head = new Node(-1);
+        tmp = nullptr;
+        t2 = nullptr;
+        //cout << "My access" << endl;
+    }
+    
+    int get(int index) {
+        //cout << "get start" <<endl;
+        if(index < 0 || index > len - 1) {
+            return -1;
+        }
+        else {
+            tmp = head;
+            for(int i = 0; i < index + 1; ++i){
+                tmp = tmp->next;
+            }
+            return tmp->val;
+        }
+    }
+    
+    void addAtHead(int val) {
+        //cout << "add head start" << endl;
+        if(head->next == nullptr) {
+            tmp = new Node(val);
+            head->next = tmp;
+            len++;
+        }
+        else {
+            tmp = new Node(val);
+            tmp->next = head->next;
+            head->next = tmp;
+            len++;
+        }
+    }
+    
+    void addAtTail(int val) {
+        //cout << "add tail start" << endl;
+        tmp = head;
+        while(tmp != nullptr) {
+            if(tmp->next == nullptr) {
+                tmp->next = new Node(val);
+                tmp = nullptr;
+                len++;
+            }
+            else {
+                tmp = tmp->next;
+            }
+        }
+    }
+    
+    void addAtIndex(int index, int val) {
+        //cout << "add index start" << endl;
+        if(index > -1 && index < len + 1) {
+            tmp = head;
+            for(int i = 0; i < index; ++i) {
+                tmp = tmp->next;
+            }
+            tmp->next = new Node(val,tmp->next);
+            len++;
+        }
+    }
+    
+    void deleteAtIndex(int index) {
+        //cout << "delete index start" << endl;
+        if(index > -1 && index < len) {
+            tmp = head;
+            for(int i = 0; i < index; ++i) {
+                tmp = tmp->next;
+            }
+            t2 = tmp->next;
+            tmp->next = t2->next;
+            delete(t2);
+            len--;
+        }
+    }
+};
+
+/**
+ * Your MyLinkedList object will be instantiated and called as such:
+ * MyLinkedList* obj = new MyLinkedList();
+ * int param_1 = obj->get(index);
+ * obj->addAtHead(val);
+ * obj->addAtTail(val);
+ * obj->addAtIndex(index,val);
+ * obj->deleteAtIndex(index);
+ */

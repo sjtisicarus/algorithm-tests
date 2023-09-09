@@ -1,0 +1,29 @@
+有提示用set，于是就用了。就跟着这个规则一直不断算，直到结果为1或者遇到重复，判断重复的方法就是每个新的结果判断set里是否已经存在，不存在就加入set，存在就return 0；
+
+class Solution {
+public:
+    bool isHappy(int n) {
+        unordered_set<int> result;
+        int tmp = 0;
+        result.insert(n);
+        while(n != 1) {
+            tmp = 0;
+            if(n/10 == 0) {
+                tmp = n*n;
+            }
+            else {
+                while(n/10 != 0) {
+                    tmp += (n%10)*(n%10);
+                    n = n/10;
+                }
+                tmp += n*n;
+            }
+            if(result.find(tmp) != result.end()) {
+                return 0;
+            }
+            result.insert(tmp);
+            n = tmp;
+        }
+        return 1;
+    }
+};

@@ -1,0 +1,45 @@
+相比上一个，删掉了ans指针，直接用双指针走一轮，代码更直观。时间空间消耗基本没变，
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        if(head == nullptr) {
+            return head;
+        }
+        else {
+            ListNode* tmp_last = nullptr;
+            ListNode* count = head;
+            while(count != nullptr) {
+                if(count->val != val) {
+                    tmp_last = count;
+                    count = count->next;
+                }
+                else {
+                    if(tmp_last == nullptr) {
+                        count = count->next;
+                        delete(head);
+                        head = count;
+                    }
+                    else {
+                        tmp_last->next = count->next;
+                        delete(count);
+                        count = tmp_last->next;
+                    }
+                }
+            }
+            return head;
+        }
+    return head; 
+    }
+};

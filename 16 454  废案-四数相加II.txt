@@ -1,0 +1,62 @@
+练习map的容器迭代器使用，顺便更深入操作了pair这个类型。
+没看清题目，做了一半才发现只需要输出个数，不用输出对应的标签组，这样就不需要用map了。
+做法很粗糙，先把前两个与后两个分别的n*n个结果加出来，再对这两个n*n的双指针找和为0；实际上测试提交发现问题，当和为0后，怎么移动下一步出了问题，有两条方向移动，在一个while循环里面实现不了。
+
+class Solution {
+public:
+    int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+        multimap<int,std::pair<int,int>> sum1;
+        multimap<int,std::pair<int,int>> sum2;
+        vector<int> ans;
+        int count = 0;
+        int n = nums1.size();
+        sum1.insert(std::pair<int,std::pair<int,int>>(-1000000,std::pair(0,0)));
+        sum2.insert(std::pair<int,std::pair<int,int>>(-1000000,std::pair(0,0)));
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                sum1.insert(std::pair<int,std::pair<int,int>>(nums1[i]+nums2[j],std::pair(i,j)));
+                cout << nums1[i] + nums2[j] << " ";
+            }
+        }
+        cout << "nums1 + nums2 above " << endl;
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                sum2.insert(std::pair<int,std::pair<int,int>>(nums3[i]+nums4[j],std::pair(i,j)));
+                cout << nums3[i] + nums4[j] << " ";
+            }
+        }
+        cout << "nums3 + nums4 above " << endl;
+        multimap<int,std::pair<int,int>> ::iterator it1 = sum1.begin();
+        multimap<int,std::pair<int,int>> ::iterator it2 = sum2.end();
+        it2--;
+        it1++;
+        cout << it1->first << " it1 and " << it2->first << " it2" << endl;
+        bool tag1 = (it2 == --sum2.begin());
+        cout << tag1 << endl;
+        while(it1 != sum1.end() && it2 != sum2.begin()) {
+            if(it1->first + it2->first > 0) {
+                cout << it1->first << " it1 and " << it2->first << " it2, it2--" << endl;
+                it2--;
+            }
+            else if(it1->first + it2->first < 0) {
+                cout << it1->first << " it1 and " << it2->first << " it2, it1++" << endl;
+                it1++;
+            }
+            else {
+                count++;
+                cout << "get ans is " << it1->first << " and " << it2->first << endl;
+                ans.push_back(it1->second.first);
+                ans.push_back(it1->second.second);
+                ans.push_back(it2->second.first);
+                ans.push_back(it2->second.second);
+                cout << " put in " << endl;
+                it1++;
+            }
+        }
+        for(int i = 0; i < ans.size(); ++i) {
+            cout << ans[i] << " ";
+        }
+        cout << endl;
+        return count;
+    }
+};

@@ -1,0 +1,108 @@
+思路写在代码间注释里了
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<int> tmp;
+        int lines1 = 0;
+        unordered_map<int,int> sum;
+        sum[nums[0]]++;
+//        cout << "get 1 ";
+        sum[nums[1]]++;
+//        cout << "get 2 " << endl;
+        unordered_map<int,int> ::iterator it3;
+        unordered_map<int,int> ::iterator it2;
+        //之前的代码先把前两个数据放了进去，如果是相同的，就增加其value，不同的，则新给一个位置放key,之后新给进的数据也是如此。之后的代码段，则是每新扫描到一个数据，将其作为第一个值x，对已输入的所有数据遍历一遍作为第二个值a，来搜索第三个值b。对于（）+ x 这种情况，每次新添加一个数据，新的组合方式只会有 x + a + b == 0,当此新添加的x是固定的，对于每次新给进数据，都是对()范围内做一个两数之和的搜索。得到的新line一定会重复两次，x+a+b和x+b+a两种情况。
+        //更改，原本的方案，也就是注释掉的地方，会导致tmp里面的三个一组的结果，不是xab，xba成对连续防止的，之后的隔一组选一个就会出错。于是换回了O(n^2)的方法，很挫败，有测试案例超出时间限制了。
+        for(int i = 2; i < nums.size(); ++i) {
+            if(sum.find(nums[i]) != sum.end()) {
+                sum[nums[i]]++;
+//                cout << " same num " << nums[i] << endl;
+            }
+            else {
+                for(it3 = sum.begin(); it3 != sum.end(); ++it3) {
+                    it2 = it3;
+                    it2++;
+                    if(it2 != sum.end()) {
+                        it2 = it3;
+                        it2++;
+                        for(it2; it2 != sum.end(); ++it2) {
+                            if(it3->first + it2->first + nums[i] == 0) {
+                                tmp.push_back(nums[i]);
+                                tmp.push_back(it3->first);
+                                tmp.push_back(it2->first);
+                                lines1++;
+                            }
+                        }
+                    }
+                    /*
+                    if(sum.find(-nums[i] - it3->first) != sum.end() && sum.find(-nums[i] - it3->first) != it3) {
+                        tmp.push_back(nums[i]);
+                        tmp.push_back(it3->first);
+                        tmp.push_back(-nums[i] - it3->first);
+                        lines1++;
+                        cout << "find " << nums[i] << " " << it3->first << " " << -nums[i] - it3->first << endl;
+                    }
+                    */
+                }
+                sum[nums[i]]++;
+//                cout << "get num " << nums[i] << endl;
+            }
+        }
+        //cout << "lines1 = " << lines1 << endl;
+        //这一段代码，则是对某一个数字有重复的情况，因为要避免出现重复的三元组，重复的数组不应该被同样的两个数多次的find到，于是将其合为一个key，只是用value标记重复次数，这时还有一种三元组情况，就是aab这样，两个重复的相同数字来find一个数字，接下来的这段就是寻找这个特例，以及000的情况。
+        int lines2 = 0;
+        unordered_map<int,int> ::iterator it1;
+        for(it1 = sum.begin(); it1 != sum.end(); ++it1) {
+            if(it1->second > 1) {
+                if(it1->second > 2 && it1->first == 0) {
+                    tmp.push_back(0);
+                    tmp.push_back(0);
+                    tmp.push_back(0);
+                    lines2++;
+//                    cout << " get 000 " << endl;
+                }
+                else {
+                    if(sum.find(-it1->first - it1->first) != sum.end() && sum.find(-it1->first - it1->first) != it1) {
+                        tmp.push_back(it1->first);
+                        tmp.push_back(it1->first);
+                        tmp.push_back(-it1->first - it1->first);
+                        lines2++;
+//                        cout << "find double " << it1->first << " " << it1->first << " " <<  -it1->first - it1->first << endl;
+                    }
+                }
+            }
+        }
+//        cout << "lines2 = " << lines2 << endl;
+        
+//        for(int i = 0; i < tmp.size(); ++i) {
+//            cout << tmp[i] << " ";
+//        }
+//        cout << endl;
+        /*
+        vector<vector<int>> ans(lines1 / 2 + lines2,vector<int>(3,0));
+        cout <<  " ans_size = " << ans.size() << " " << endl;
+        for(int i = 0; i < lines1 / 2; ++i) {
+            ans[i][0] = tmp[6 * i];
+            ans[i][1] = tmp[6 * i + 1];
+            ans[i][2] = tmp[6 * i + 2];
+            cout << ans[i][0] << " " << ans[i][1] << " " << ans[i][2] << endl;
+        }
+        for(int i = lines1 / 2; i < lines1 / 2 + lines2; ++i) {
+            ans[i][0] = tmp[3 * lines1 + 3 * (i - lines1 / 2)];
+            ans[i][1] = tmp[3 * lines1 + 3 * (i - lines1 / 2) + 1];
+            ans[i][2] = tmp[3 * lines1 + 3 * (i - lines1 / 2) + 2];
+            cout << ans[i][0] << " " << ans[i][1] << " " << ans[i][2] << endl;
+        }
+        */
+        vector<vector<int>> ans(lines1 + lines2,vector<int>(3,0));
+//        cout <<  " ans_size = " << ans.size() << " " << endl;
+        for(int i = 0; i < lines1 + lines2; ++i) {
+            ans[i][0] = tmp[3 * i];
+            ans[i][1] = tmp[3 * i + 1];
+            ans[i][2] = tmp[3 * i + 2];
+//            cout << ans[i][0] << " " << ans[i][1] << " " << ans[i][2] << endl;
+        }
+        return ans;
+    }
+};

@@ -1,0 +1,35 @@
+双指针法，一个左指针一个右指针，总共走len步，谁大就填进去，并将对应指针移动位置。
+减少开销，于是在填后移动后将平方值算出并放入寄存变量，比较时直接比较寄存变量，而不需要在比较时重复算平方值。
+
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        int len = nums.size();
+        int left = 0;
+        int right = len-1;
+        //cout << len << " " << left << " " << right << " " << endl;
+        int l_tmp = 0;
+        int r_tmp = 0;
+        l_tmp = nums[left] * nums[left];
+        r_tmp = nums[right] * nums[right];
+        //cout << l_tmp << " " << r_tmp << endl;
+        vector<int> new_line(len);
+        for(int k = len-1; k >= 0; --k){
+            if(l_tmp >= r_tmp){
+                new_line[k] = l_tmp;
+                //cout << "new fid in " << l_tmp << " left" << endl;
+                left++;
+                if(left < len){l_tmp = nums[left] * nums[left];}
+                //cout << l_tmp << " " << r_tmp << endl;
+            }
+            else if(l_tmp < r_tmp){
+                new_line[k] = r_tmp;
+                //cout << "new fid in " << r_tmp << " right" << endl;
+                right--;
+                if(right >= 0){r_tmp = nums[right] * nums[right];}
+            }
+
+        } 
+        return new_line;
+    }
+};

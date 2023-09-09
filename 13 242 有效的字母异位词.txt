@@ -1,0 +1,44 @@
+看哈希表知识，讲了些set和map，于是用multiset做。可以很简短，不过时间空间不是很好。看了下题解，好像把方向搞错了，不应该用STL来整。
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        //bool ans = 1;
+        multiset<char> s1(s.begin(),s.end());
+        multiset<char> t1(t.begin(),t.end());
+        if(s.size() != t.size()) {
+            return 0;
+            //ans = 0;
+            //return ans;
+        }
+        multiset<char> ::iterator s11 = s1.begin();
+        multiset<char> ::iterator t11 = t1.begin();
+        /*
+        while(s11 != s1.end()) {
+            cout << *s11 << " ";
+            s11++;
+        }
+        cout << endl;
+        while(t11 != t1.end()) {
+            cout << *t11 << " ";
+            t11++;
+        }
+        cout << endl;
+        s11 = s1.begin();
+        t11 = t1.begin();
+        */
+        while(s11 != s1.end()) {
+            if(*s11 != *t11) {
+                return 0;
+                //ans = 0;
+                //cout << "ans = 1";
+                //return ans;
+            }
+            s11++;
+            t11++;
+        }
+        return 1;
+        //cout << "ans = 2";
+        //return ans;
+    }
+};

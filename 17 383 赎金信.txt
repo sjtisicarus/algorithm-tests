@@ -1,0 +1,19 @@
+经典的hash数组，一开始写的麻烦一些，简化了一下就很简便了，
+
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        int labels[26]={0};
+        for(int i = 0; i < magazine.size(); ++i) {
+            labels[magazine[i]-'a']++;
+        }
+        int len1 = ransomNote.size();
+        for(int i = 0; i < ransomNote.size(); ++i) {
+            labels[ransomNote[i]-'a']--;
+            if(labels[ransomNote[i]-'a'] < 0) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+};

@@ -1,0 +1,48 @@
+废案1，思路是构造一个新的链表，逐次扫描之前的链表，不是val的就新生成结点接入新链表。
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        if(head == NULL) {
+            return head;
+        }
+        else {
+            ListNode* ans = NULL;
+            ListNode* tmp = NULL;
+            ListNode* tmp_last = NULL;
+            ListNode* count = head;
+            while(count != NULL) {
+                if(count->val != val) {
+                    tmp_last = new ListNode(count->val);
+                    if(ans == NULL) {
+                        ans = tmp_last;
+                        tmp = tmp_last;
+                        count = count->next;
+                    }
+                    else {
+                        tmp->next = tmp_last;
+                        tmp = tmp_last;
+                        tmp_last = tmp_last->next;
+                        count = count->next;
+                    }
+                }
+                else if(tmp->val == val) {
+                    count = count->next;
+                }
+            }
+            return ans;
+        }
+    return head; 
+    }
+};

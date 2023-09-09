@@ -1,0 +1,30 @@
+看了题解后新解决方案。相当于用数组自己构造了一个简单的hash表，时间O(m+n)，主要是重新捡起了string和char的一些知识。
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        int dif[26];
+        for(int i = 0; i < 26; ++i) {
+            dif[i] = 0;
+        }
+        char tmp = s[0];
+        int size = 0;
+        size = s.size();
+        for(int i = 0; i < size; ++i) {
+            tmp = s[i];
+            dif[tmp - 'a']++;
+        }
+        tmp = t[0];
+        size = t.size();
+        for(int i = 0; i < size; ++i) {
+            tmp = t[i];
+            dif[tmp-'a']--;
+        }
+        for(int i = 0; i < 26; ++i) {
+            if(dif[i] != 0) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+};

@@ -1,0 +1,32 @@
+滑动窗口，双指针法。
+解法一开始没想出来，看到题解标题的滑动窗口，去搜了一下概念，才想出来怎么解。
+
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int len = nums.size();
+        int left = 0;
+        int right = 0;
+        int tmp_sum = nums[0];
+        int min_len = len + 1;
+        while(right < len && left <= right){
+            if(tmp_sum < target){
+                right++;
+                if(right < len){
+                    tmp_sum += nums[right];
+                }
+            }
+            else if(tmp_sum >= target){
+                if(left < right){
+                    tmp_sum -= nums[left];
+                }
+                min_len = min(right - left + 1, min_len);
+                left++;
+            } 
+        }
+        if(min_len < len + 1){
+            return min_len;
+        }  
+        return 0;
+    }
+};

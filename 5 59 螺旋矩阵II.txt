@@ -1,0 +1,39 @@
+做法：画图，分成一层一层，用i来for循环层数，对每一层的四个边分别以此给值，四条边旋转对称的，用j来依次爬。
+
+
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        bool odd = 0;
+        if(n%2 == 1){odd = 1;}
+        int layers = n / 2;
+        vector<vector<int>> ans(n,vector<int>(n));
+        /*int **ans = new int* [n];
+        for(int i = 0; i < n; ++i){
+            ans[i] = new int[n];
+        }*/
+        int count = 1;
+        for(int i = 0; i < layers; ++i){
+            for(int j = i; j < n-1-i; ++j){
+                ans[i][j] = count;
+                count++;
+            }
+            for(int j = i; j < n-1-i; ++j){
+                ans[j][n-1-i] = count;
+                count++;
+            }
+            for(int j = n-1-i; j > i; --j){
+                ans[n-1-i][j] = count;
+                count++;
+            }
+            for(int j = n-1-i; j > i; --j){
+                ans[j][i] = count;
+                count++;
+            }
+        }
+        if(odd == 1){
+            ans[n/2][n/2] = count;
+        }
+        return ans;
+    }
+};

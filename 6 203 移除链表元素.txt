@@ -1,0 +1,53 @@
+相比上一个废案，直接在head链表上进行改动
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        if(head == nullptr) {
+            return head;
+        }
+        else {
+            ListNode* ans = nullptr;
+            ListNode* tmp_last = nullptr;
+            ListNode* count = head;
+            while(count != nullptr) {
+                if(count->val != val) {
+                    if(ans == nullptr) {
+                        ans = count;
+                        tmp_last = count;
+                        count = count->next;
+                    }
+                    else {
+                        tmp_last = count;
+                        count = count->next;
+                    }
+                }
+                else {
+                    if(ans == nullptr) {
+                        count = count->next;
+                        delete(head);
+                        head = count;
+                    }
+                    else {
+                        tmp_last->next = count->next;
+                        delete(count);
+                        count = tmp_last->next;
+                    }
+                }
+            }
+            return ans;
+        }
+    return head; 
+    }
+};

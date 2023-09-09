@@ -1,0 +1,42 @@
+看到题目就想到了set的去重复功能，干脆先用STL写一个，练习一下STL的熟练度。
+
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        set<int> filter1(nums1.begin(),nums1.end());
+        set<int> filter2(nums2.begin(),nums2.end());
+        //cout << "get the nums" << endl;
+        set<int> ::iterator t1 = filter1.begin();
+        set<int> ::iterator t2 = filter2.begin();
+        int size = min(filter1.size(), filter2.size());
+        vector<int> ans(size);
+        int count = 0;
+        /*
+        cout << "get size " << size <<endl;
+        for (int i = 0; i < ans.size(); ++i) {
+            cout << ans[i] << " ";
+        }
+        cout << endl;
+        */
+        while(t1 != filter1.end() && t2 != filter2.end()) {
+            if(*t1 < *t2) {
+                t1++;
+            }
+            else if(*t1 > *t2) {
+                t2++;
+            }
+            else {
+                ans[count] = *t1;
+                count++;
+                t1++;
+                t2++;
+                //cout << "get num " << *t1 << endl;
+            }
+        }
+        while(size - count > 0) {
+            ans.pop_back();
+            count++;
+        }
+        return ans;
+    }
+};

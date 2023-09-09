@@ -1,0 +1,23 @@
+看了题解才做出来的，整体思路差不多，不过我没想到的点在于用map的value来保存重复数值的个数，count直接加个数就是，可以避免废案里提到的问题。
+
+class Solution {
+public:
+    int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+        unordered_map<int,int> sum1;
+        int count = 0;
+        int n = nums1.size();
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                sum1[nums1[i]+nums2[j]]++;
+            }
+        }
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                if(sum1.count(-nums3[i]-nums4[j])) {
+                    count += sum1[-nums3[i]-nums4[j]];
+                }
+            }
+        }
+        return count;
+    }
+};

@@ -1,0 +1,33 @@
+废案：原因是：空间相比上一个废案虽然从O(n^2)优化到O(n)，但是时间还是O(n^2)
+class Solution {
+public:
+    int minSubArrayLen(int target, vector<int>& nums) {
+        int len = nums.size();
+        //cout << "len=" << len << endl;
+        int *siz = new int [len];
+        if(len == 0){
+            return 0;
+        }
+        else if(len >= 1){
+            for(int i = 0; i < len; ++i){
+                siz[i] = nums[i];
+                //cout << "siz[" << i << "]=" << siz[i] << endl;
+                if(siz[i] >= target){
+                    return 1;
+                }
+            }
+            if(len > 1){
+                for(int i = 1; i < len; ++i){
+                    for(int j = 0; j < len - i;++j){
+                        siz[j] = siz[j] + nums[j+i];
+                        //cout << "siz[" << i << "][" << j << "]=" << siz[j] << endl;
+                        if(siz[j] >= target){
+                            return i+1;
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};

@@ -1,0 +1,41 @@
+以前见过的很经典的题，过了一两年居然还能想起做法。
+要定位到倒数第n个节点，用双指针，一个快一个慢，慢指针比快指针后启动n回合。这样快指针指到最后一个节点时候，慢指针指在目标节点上一个。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        ListNode* tmp = nullptr;
+        while(n > 0) {
+            fast = fast->next;
+            n--;
+        }
+        if(fast == nullptr) {
+            head = head->next;
+            delete(slow);
+            return head;
+        }
+        else {
+            while(fast->next != nullptr) {
+            fast = fast->next;
+            slow = slow->next;
+            }
+            tmp = slow->next;
+            slow->next = tmp->next;
+            delete(tmp);
+            return head;
+        }
+        
+    }
+};

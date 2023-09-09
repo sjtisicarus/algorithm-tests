@@ -1,0 +1,36 @@
+题解原来是我一开始觉得应该的方法，看到是hash章，硬是让自己往hash去想了，反而走到了困境里。
+基本上就是，先排序，做n次双指针法。一个指针定限，从左往右使范围越来越小，剩下两个指针在右边的范围内，一个最左一个最右双指针法跑一趟。共做n次双指针法，O(n^2)
+想的很累，结果方向错了，很烦躁。看懂了题解的代码后，就把题解的代码给复制下来，重新写了下注释给自己看了。
+才发现vector<vector<int>>的对象原来可以直接push_back vector<int>，亏我还忙死忙活的计数然后一个个给双重数组赋值。
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] > 0) {
+                return result;
+            }
+            //注意这个去重方法，是对比nums[i]与nums[i-1]，这样可以避免错过掉[-1,-1,2]这类aab的情况。因为第一次遇到a，右边的两个指针的双指针法会获得aab的结果，之后第一个指针右移后，就排除掉重复的aa的情况了。
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while (right > left) {
+                if (nums[i] + nums[left] + nums[right] > 0) right--;
+                else if (nums[i] + nums[left] + nums[right] < 0) left++;
+                else {
+                    result.push_back(vector<int>{nums[i], nums[left], nums[right]});
+                    //这里是对双指针法的两个指针情况的去重处理，也是要在第一次判断后再移动，否则遇到000这种情况会出错。(就是当匹配时，两个指针左移右移到不一样的数为止)
+                    while (right > left && nums[right] == nums[right - 1]) right--;
+                    while (right > left && nums[left] == nums[left + 1]) left++;
+                    right--;
+                    left++;
+                }
+            }
+        }
+        return result;
+    }
+};

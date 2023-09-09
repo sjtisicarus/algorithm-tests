@@ -1,0 +1,43 @@
+以前用过暴力双循环，也用过手写一个快排，手动用一个数组保存下标，来实现map的效果，现在可以直接用一个multimap，省力很多。
+看了下两年前学这个题的几种方法，有一个也是双指针的，是复制了一份nums来排序，获得结果的值后回到nums来遍历一遍找下标。
+题解的是用的hash，使用unordered_map在输入的同时，不断去find是否有匹配，一遍输入完成就正好全部搜索过。O(n)。
+我用multimap加双指针法，实际上是慢一些的。
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> ans;
+        multimap<int,int> tmp;
+        for(int i = 0; i < nums.size(); ++i) {
+            tmp.insert(std::pair<int,int>(nums[i],i));
+        }
+        //sort(nums.begin(),nums.end());
+        
+        //cout << endl;
+        multimap<int,int> ::iterator i = tmp.begin(); 
+        multimap<int,int> ::iterator j = tmp.end();
+        j--;
+        /*
+        for (i = tmp.begin(); i != tmp.end(); ++i) {
+            cout << "num=" << i->first << ", index=" << i->second << " ";
+        }
+        cout << endl;
+        i = tmp.begin();
+        */
+        //cout << "i=" << i << " j= " << j << endl;
+        while(i != j) {
+            if(i->first + j->first < target) {
+                i++;
+            }
+            else if(i->first + j->first > target) {
+                j--;
+            }
+            else {
+                ans.push_back(i->second);
+                ans.push_back(j->second);
+                return ans;
+            }
+        }
+        return ans;
+    }
+};

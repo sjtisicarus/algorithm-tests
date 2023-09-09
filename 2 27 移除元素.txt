@@ -1,0 +1,43 @@
+双指针法，快慢指针法。
+假设要删去的是x，ij两个指针。ij都没遇到x时，各自右移1位；都遇到x时，i停下，j继续右移，直至j遇到非x，交换并且交换后ij右移1位。
+除了刚交换还没右移时，不会出现i遇到非x而j遇到x的情况。（只要有一个x，那么每次移动，i都会一步一步推着x往右，只会出现i遇到x，j遇到x/非x的情况。
+
+
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int i = 0;
+        int j = 0;
+        int len = nums.size();
+        int tem = 0;
+        //int size = 0;
+        while(j<len){
+            if(nums[i] != val && nums[j] != val && 0<= i && i < len && 0<= j && j < len){
+                i++;j++;
+                //size++;
+                cout << "case1:" << i << " " << j << " " << len << endl;
+            }
+            else if(nums[i] == val && nums[j] == val && 0<= i && i < len && 0<= j && j < len){
+                j++;
+                cout << "case2:" << i << " "  << j << " " << len << endl;
+            }
+            else if(nums[i] == val && nums[j] != val && 0<= i && i < len && 0<= j && j < len){
+                tem = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tem;
+                i++;j++;
+                cout << "case3:" << i << " "  << j << " " << len << endl;
+            }
+            else {
+                cout << "case4:" << i << " "  << j << " " << len << endl;
+            }
+            /*else if(i != val && j == val && 0<= i < len && 0<= j < len){
+                i++;j++;
+                cout << "case4" << i << j << endl;
+                //size++;
+            }*/
+        }
+        //return size;
+        return i;
+    }
+};
