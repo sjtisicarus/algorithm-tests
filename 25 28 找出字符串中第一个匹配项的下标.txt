@@ -1,0 +1,93 @@
+kmp
+
+class Solution {
+public:
+    vector<int> Next(string &str) {
+        vector<int> next;
+        next.push_back(0);
+        for(int i = 1, j = 0; i < str.size(); ++i) {
+            while(j && str[j] != str[i]) {
+                j = next[j - 1];
+            }
+            if(str[j] == str[i]) {
+                ++j;
+            }
+            next.push_back(j);
+        }
+// cout << "Next[] = ";
+// for(int k = 0; k < next.size(); ++k) {
+//     cout << next[k] << " ";
+// }
+// cout << endl;
+        return next;
+    }
+    int kmp(string &longstr, string &shortstr) {
+        if(longstr.size() < shortstr.size()) {
+            return -1;
+        }
+        vector<int> NextV = Next(shortstr);
+        for(int i = 0, j = 0; i < longstr.size(); ++i) {
+            while(j && shortstr[j] != longstr[i]) {
+                j = NextV[j - 1];
+            }
+            if(shortstr[j] == longstr[i]) {
+                ++j;
+            }
+            if(j == shortstr.size()) {
+                //j = NextV[j - 1];
+                return i - j + 1;
+            }
+        }
+        return -1;
+    }
+    int strStr(string haystack, string needle) {
+        return kmp(haystack, needle);
+    }
+};
+
+
+kmp精简
+
+//这是next起始为0的kmp
+    vector<int> Next(string &str) {
+        vector<int> next;
+        next.push_back(0);
+        for(int i = 1, j = 0; i < str.size(); ++i) {
+            while(j && str[j] != str[i]) {j = next[j - 1];}
+            if(str[j] == str[i]) {++j;}
+            next.push_back(j);
+        }
+        return next;
+    }
+    int kmp(string &longstr, string &shortstr) {
+        if(longstr.size() < shortstr.size()) {return -1;}
+        vector<int> NextV = Next(shortstr);
+        for(int i = 0, j = 0; i < longstr.size(); ++i) {
+            while(j && shortstr[j] != longstr[i]) {j = NextV[j - 1];}
+            if(shortstr[j] == longstr[i]) {++j;}
+            if(j == shortstr.size()) {return i - j + 1;}
+        }
+        return -1;
+    }
+
+//这是next起始为-1的kmp
+    vector<int> Next(string &str) {
+        vector<int> next;
+        next.push_back(-1);
+        for(int i = 1, j = -1; i < str.size(); ++i) {//i是遍历指针，j是后缀位置指针
+            while(j > -1 && str[j + 1] != str[i]) { j = next[j]; }
+            if(str[j + 1] == str[i]) { ++j; }
+            next.push_back(j);
+        }
+        return next;
+    }
+    int kmp(string &longstr, string &shortstr) {
+        if(longstr.size() < shortstr.size()) { return -1; }
+        vector<int> NextV = Next(shortstr);
+        for(int i = 0, j = -1; i < longstr.size(); ++i) {
+            while(j > -1 && shortstr[j + 1] != longstr[i]) { j = NextV[j]; }
+            if(shortstr[j + 1] == longstr[i]) { ++j; }
+            if(j + 1 == shortstr.size()) { return i - shortstr.size() + 1; }
+        }
+        return -1;
+    }

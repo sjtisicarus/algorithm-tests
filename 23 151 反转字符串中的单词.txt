@@ -1,0 +1,67 @@
+题解称这种做法是水题做法，好像还真是，新开一个，扫描一个单词就添加进去。算是练习了下string的用法。
+题解的方法也想过，结果觉得麻烦，反而没往那个方向做了。
+啊，看了下，水题解法值得是用库函数，我这个相当于快慢指针双指针法，还是可以的。
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        string ans;
+        int t = 0;
+        for(int i = s.size() - 1; i > -1; --i) {
+            if(s[i] != ' ') {
+                t = i;
+//cout << "word end = " << t << endl;
+                while(s[i] != ' ' && i > -1) {
+                    if(i == 0) {
+                        i--;
+                        break;
+                    }
+                    else{
+                        i--;
+                    }
+//cout << "i = " << i << " ";
+                }
+// cout << endl;
+// cout << "word start = " << i + 1 << endl;
+// cout << "word is \"";
+// for(int j = i + 1; j < t + 1; ++j) {
+//     cout << s[j];
+// }
+// cout << "\"" << endl;
+                ans.insert(ans.size(), s, i + 1, t - i);
+                ans.push_back(' ');
+//cout << "ans is \"" << ans << "\"" << endl;
+            }
+        }
+        ans.pop_back();
+        return ans;
+    }
+};
+
+
+无注释如下
+class Solution {
+public:
+    string reverseWords(string s) {
+        string ans;
+        int t = 0;
+        for(int i = s.size() - 1; i > -1; --i) {
+            if(s[i] != ' ') {
+                t = i;
+                while(s[i] != ' ' && i > -1) {
+                    if(i == 0) {
+                        i--;
+                        break;
+                    }
+                    else{
+                        i--;
+                    }
+                }
+                ans.insert(ans.size(), s, i + 1, t - i);
+                ans.push_back(' ');
+            }
+        }
+        ans.pop_back();
+        return ans;
+    }
+};

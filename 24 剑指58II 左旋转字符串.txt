@@ -1,0 +1,18 @@
+曾经学考研数据结构，有这个经典题，两部分分别reverse后，整体reverse，就可以达到将前一部分放到后一部分的效果。加上前几题都在考验reverse，于是就顺理成章的几分钟解决了。
+
+class Solution {
+public:
+    void reverse(string &s, int l, int r) {
+        while(l < r) {
+            swap(s[l], s[r]);
+            l++;
+            r--;
+        }
+    }
+    string reverseLeftWords(string s, int n) {
+        reverse(s, 0, n-1);
+        reverse(s, n, s.size() - 1);
+        reverse(s, 0, s.size() - 1);
+        return s;
+    }
+};

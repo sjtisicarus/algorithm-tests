@@ -1,0 +1,76 @@
+想了很多判定条件。一开始做错好几次，以为next是0000.。。000123456这样就行，结果发现例如abaababaab这种不符合，以及next是00001这类也不成立，于是又列了几个例子找共同点，发现next最后一个值，如果是符合题意的情况，s长度减其就为每个最小循环单元长度。后写了一堆东西来判定剩下的一一对应相同，结果发现好像不需要更多的，只要能确定最小循环长度可以被整除就行了，发现空间利用率高，于是把next传递数组改成只传递最后一个值。
+题解清晰指出：当一个字符串由重复子串组成的，最长相等前后缀不包含的子串就是最小重复子串
+
+
+传递next数组情况
+class Solution {
+public:
+    vector<int> next(string &s) {
+        vector<int> Next;
+        Next.push_back(0);
+        for(int i = 1, j = 0; i < s.size(); ++i) {
+            while(j && s[j] != s[i]) {
+                j = Next[j - 1];
+            }
+            if(s[j] == s[i]) {
+                ++j;
+            }
+            Next.push_back(j);
+        }
+// cout << "Next = ";
+// for(int i = 0; i < Next.size(); ++i) {
+//     cout << Next[i] << " ";
+// }
+// cout << endl;
+        return Next;
+    }
+    bool repeatedSubstringPattern(string s) {
+        vector<int> tmp = next(s);
+        int count = tmp.size() - tmp[tmp.size() - 1];
+//cout << "count = " << count << endl;
+        if(tmp.size() % count != 0 || count > tmp.size() / 2) {
+            return 0;
+        }
+/*
+        int nums = tmp.size() / count;
+cout << "nums = " << nums << endl;
+        for(int j = 0; j < count; ++j) {
+cout << "j = " << j << endl;
+            for(int i = 1; i < nums; ++i) {
+                if(s[j] != s[i * count + j]) {
+cout << "s[j] = " << s[j] << ", s[] = " << s[i * count + j] << endl;
+                    return 0;
+                }
+            }
+        }
+*/
+        return 1;
+
+    }
+};
+
+传next最后一个值
+class Solution {
+public:
+    int next(string &s) {
+        int Next[s.size()];
+        Next[0] = 0;
+        for(int i = 1, j = 0; i < s.size(); ++i) {
+            while(j && s[j] != s[i]) {
+                j = Next[j - 1];
+            }
+            if(s[j] == s[i]) {
+                ++j;
+            }
+            Next[i] = j;
+        }
+        return Next[s.size() - 1];
+    }
+    bool repeatedSubstringPattern(string s) {
+        int count = s.size() - next(s);
+        if(count > s.size() / 2 || s.size() % count != 0) {
+            return 0;
+        }
+      return 1;
+    }
+};

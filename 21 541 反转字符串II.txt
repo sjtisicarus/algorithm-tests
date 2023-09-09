@@ -1,0 +1,84 @@
+这个做法就是，两个长度为k的for循环里，第一个循环会在判定段落结束，调用反转函数，另一个不会。反转函数就是上一题的方法。
+题解的外围判断，不是用的while，而是直接for循环，但是每一次循环后变动是，i+2k，其内则不用再for循环一个一个看，而是直接if判断。对i+k是否超出范围做判断时，将情况细化为，只对i->i+k这个范围进行判断，不去管i+k->i+2k。
+用库函数reverse，或者自己写的reverse，注意string类要能够改变其中值，需要用引用传递。
+
+class Solution {
+public:
+    string reverse(string &s, int left, int right) {
+        char t;
+//        int tmp = left;
+//        int i = right;
+        while(left < right) {
+            t = s[left];
+            s[left] = s[right];
+            s[right] = t;
+            left++;
+            right--;
+        }
+/*        
+        cout << " get ";
+                    for (int k = tmp; k < i + 1; ++k) {
+                        cout << s[k];
+                    }
+                    cout << endl;
+                    cout << "tmp = " << tmp << ", i = " << i;
+                    cout << endl;
+*/
+        return s;
+    }
+    string reverseStr(string s, int k) {
+        string a(s);
+        int i = 0;
+        int tmp = 0;
+        if (k == 1) {
+            return a;
+        }
+        while(a[i] != '\0') {
+            for(int j = 0; j < k; ++j) {
+                if(a[i + 1] == '\0') {
+/*
+                    cout << " reverse ";
+                    for (int k = tmp; k < i + 1; ++k) {
+                        cout << a[k];
+                    }
+                    cout << endl;
+                    cout << "tmp = " << tmp << ", i = " << i;
+                    cout << endl;
+*/
+                    reverse(a, tmp, i);
+                    return a;
+                }
+                else if(j == k-1) {
+/*
+                     cout << " reverse ";
+                    for (int k = tmp; k < i + 1; ++k) {
+                        cout << a[k];
+                    }
+                    cout << endl;
+                    cout << "tmp = " << tmp << ", i = " << i;
+                    cout << endl;
+*/
+                    reverse(a, tmp, i);
+                    i++;
+                    tmp = i;
+                }
+                else {
+                    i++;
+                }
+            }
+            for(int  j = 0; j < k; ++j) {
+                if(a[i + 1] == '\0') {
+                    return a;
+                }
+                else if(j == k - 1){
+                    i++;
+                    tmp = i;
+                }
+                else {
+                    i++;
+                }
+            }
+        }
+        return a;
+    }
+}; 

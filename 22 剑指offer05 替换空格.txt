@@ -1,0 +1,20 @@
+开个新的字符串，扫描一遍。
+题解不需要开新空间，直接将原空间延长，再用双指针法从后向前更新s。
+用resize库函数来更新s的长度
+class Solution {
+public:
+    string replaceSpace(string s) {
+        string b;
+        for(int i = 0; i < s.size(); ++i) {
+            if(s[i] != ' ') {
+                b.push_back(s[i]);
+            }
+            else {
+                b.push_back('%');
+                b.push_back('2');
+                b.push_back('0');
+            }
+        }
+        return b;
+    }
+};
