@@ -1,0 +1,109 @@
+想了一会，首先把频次用unordered_map转化成数很容易想到，但是接下来，寻找最大的k个数，用栈和队列都不太好想到，于是一开始想了用链表，结果发现要比较大小，还是会时间复杂度过高，接着想到堆，构建大顶堆，然后输出k次值就是，不过大顶堆不会写，于是就空着，又去想队列和栈的做法，想不出来。看题解，用优先级队列，结果优先级队列的内在构造就是用堆完成的，应该算想出来解题思路的了。
+想的方法是，将所有频次值放入大顶堆，大顶堆再取顶k次。也想过用一个大小为k的空间，储存目前遇到的k个最大的频次值，一旦遇到比其中最小的要大的，就替换掉最小的，但是怎么来排序或者搜索最小的也是时间复杂度高的事情，就没想下去。题解用的第二种思路，用一个大小为k的小顶堆来储存最大的k个频次值，遇到比堆顶大的，就pop堆顶，然后添加新的值进堆，最后剩下的堆里的k个值就是最大的k个值。
+参照题解的方法，我用的全部放入大顶堆，大顶堆再pop掉k次得到结果的方式来做，另附题解的大小为k的小顶堆做法在下面，会更省空间。
+priority_queue的用法还是很不熟悉，没办法自己默写出来。
+
+class Solution {
+public:
+    class com {
+    public:
+        bool operator()(const pair<int,int> &a, const pair<int,int> &b) {
+            return a.second < b.second;
+        }
+    };
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> ans;
+        unordered_map<int,int> get_frenquency;
+        for(int i = 0; i < nums.size(); ++i) {
+            if(get_frenquency.find(nums[i]) == get_frenquency.end()) {
+                get_frenquency.insert(pair<int,int>(nums[i],1));
+            }
+            else {
+                get_frenquency[nums[i]]++;
+            }
+        }
+
+// for(unordered_map<int,int>::iterator it = get_frenquency.begin(); it != get_frenquency.end(); ++it) {
+//     cout << "(" << it->first << "," << it->second << ") ";
+// }
+// cout << endl;
+        //之后就变为找最大的k个数，可以用大顶堆，
+        priority_queue<pair<int,int>, vector<pair<int,int>>, com> pri_que;
+        for(unordered_map<int,int>::iterator it = get_frenquency.begin(); it != get_frenquency.end(); ++it) {
+            pri_que.push(*it);
+        }
+        for(int i = 0; i < k; ++i) {
+            ans.push_back(pri_que.top().first);
+            pri_que.pop();
+        }
+        return ans;
+    }
+};
+
+稍微简化代码
+class Solution {
+public:
+    class com {
+    public:
+        bool operator()(const pair<int,int> &a, const pair<int,int> &b) {
+            return a.second < b.second;
+        }
+    };
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> ans;
+        unordered_map<int,int> freq;
+        for(int i = 0; i < nums.size(); ++i) {
+            freq[nums[i]]++;
+        }
+        priority_queue<pair<int,int>, vector<pair<int,int>>, com> pri_que;
+        for(unordered_map<int,int>::iterator it = freq.begin(); it != freq.end(); ++it) {
+            pri_que.push(*it);
+        }
+        for(int i = 0; i < k; ++i) {
+            ans.push_back(pri_que.top().first);
+            pri_que.pop();
+        }
+        return ans;
+    }
+};
+
+
+题解做法
+class Solution {
+public:
+    // 小顶堆
+    class mycomparison {
+    public:
+        bool operator()(const pair<int, int>& lhs, const pair<int, int>& rhs) {
+            return lhs.second > rhs.second;
+        }
+    };
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        // 要统计元素出现频率
+        unordered_map<int, int> map; // map<nums[i],对应出现的次数>
+        for (int i = 0; i < nums.size(); i++) {
+            map[nums[i]]++;
+        }
+
+        // 对频率排序
+        // 定义一个小顶堆，大小为k
+        priority_queue<pair<int, int>, vector<pair<int, int>>, mycomparison> pri_que;
+
+        // 用固定大小为k的小顶堆，扫面所有频率的数值
+        for (unordered_map<int, int>::iterator it = map.begin(); it != map.end(); it++) {
+            pri_que.push(*it);
+            if (pri_que.size() > k) { // 如果堆的大小大于了K，则队列弹出，保证堆的大小一直为k
+                pri_que.pop();
+            }
+        }
+
+        // 找出前K个高频元素，因为小顶堆先弹出的是最小的，所以倒序来输出到数组
+        vector<int> result(k);
+        for (int i = k - 1; i >= 0; i--) {
+            result[i] = pri_que.top().first;
+            pri_que.pop();
+        }
+        return result;
+
+    }
+};

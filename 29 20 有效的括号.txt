@@ -1,0 +1,60 @@
+栈的使用
+
+两种建议代码
+class Solution {
+public:
+    bool isValid(string s) {
+        std::stack<char> stk;
+        for(int i = 0; i < s.size(); ++i) {
+            if(stk.empty()) {
+                stk.push(s[i]);
+            }
+            else if(stk.top() == '(' && s[i] == ')') {
+                stk.pop();
+            }
+            else if(stk.top() == '{' && s[i] == '}') {
+                stk.pop();
+            }
+            else if(stk.top() == '[' && s[i] == ']') {
+                stk.pop();
+            }
+            else {
+                stk.push(s[i]);
+            }
+        }
+        return stk.empty();
+    }
+
+
+class Solution {
+public:
+    bool isValid(string s) {
+        std::stack<char> stk;
+        for(int i = 0; i < s.size(); ++i) {
+            if(stk.empty()) {
+                if(s[i] == '}' || s[i] == ']' || s[i] == ')') {
+                    return 0;
+                }
+                else {
+                    stk.push(s[i]);
+                }
+            }
+            else if(s[i] == '[' || s[i] == '(' || s[i] == '{') {
+                stk.push(s[i]);
+            }
+            else if(stk.top() == '(' && s[i] != ')') {
+                return 0;
+            }
+            else if(stk.top() == '{' && s[i] != '}') {
+                return 0;
+            }
+            else if(stk.top() == '[' && s[i] != ']') {
+                return 0;
+            }
+            else {
+                stk.pop();
+            }
+        }
+        return stk.empty();
+    }
+};

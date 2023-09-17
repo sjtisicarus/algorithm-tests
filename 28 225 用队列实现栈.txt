@@ -1,0 +1,50 @@
+熟悉queue操作，可以简化到一个队列实现
+
+class MyStack {
+public:
+    std::queue<int> que1;
+    std::queue<int> que2;
+    MyStack() {
+
+    }
+    
+    void push(int x) {
+        if(que1.empty()) {
+            que1.push(x);
+        }
+        else {
+            while(!que1.empty()) {
+                que2.push(que1.front());
+                que1.pop();
+            }
+            que1.push(x);
+            while(!que2.empty()) {
+                que1.push(que2.front());
+                que2.pop();
+            }
+        }
+    }
+    
+    int pop() {
+        int tmp = que1.front();
+        que1.pop();
+        return tmp;
+    }
+    
+    int top() {
+        return que1.front();
+    }
+    
+    bool empty() {
+        return que1.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */

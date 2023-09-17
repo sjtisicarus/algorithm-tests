@@ -1,0 +1,54 @@
+栈的应用
+
+第二个相对第一个稍微优化了一点，节省了一点时间和空间。
+class Solution {
+public:
+    string removeDuplicates(string s) {
+        std::stack<char> stk;
+        int siz = s.size();
+        for(int i = 0; i < s.size(); ++i) {
+            if(stk.empty()) {
+                stk.push(s[i]);
+            }
+            else if(stk.top() == s[i]) {
+                stk.pop();
+                siz -= 2;
+            }
+            else {
+                stk.push(s[i]);
+            }
+        }
+        string a(siz,'0');
+        for(int i = siz - 1; i > -1; --i) {
+            a[i] = stk.top();
+            stk.pop();
+        }
+        return a;
+    }
+};
+
+class Solution {
+public:
+    string removeDuplicates(string s) {
+        std::stack<char> stk;
+        int count = 0;
+        for(int i = 0; i < s.size(); ++i) {
+            if(stk.empty()) {
+                stk.push(s[i]);
+                s[count] = s[i];
+                count++;
+            }
+            else if(stk.top() == s[i]) {
+                stk.pop();
+                count--;
+            }
+            else {
+                stk.push(s[i]);
+                s[count] = s[i];
+                count++;
+            }
+        }
+        s.resize(count);
+        return s;
+    }
+};

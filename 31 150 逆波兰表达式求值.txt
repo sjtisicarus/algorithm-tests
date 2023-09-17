@@ -1,0 +1,68 @@
+没发现给的是String的数组，结果写了后改了半天。
+
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> stk;
+        int ans = 0;
+        int tmp = 0;
+        for(int i = 0; i < tokens.size(); ++i) {
+            if(tokens[i][0] == '+') {
+//cout << "get + " << endl;
+                tmp = stk.top();
+                stk.pop();
+                ans = stk.top() + tmp;
+                stk.pop();
+                stk.push(ans);
+            }
+            else if(tokens[i][0] == '-' && tokens[i][1] == '\0') {
+//cout << "get - " << endl;
+                tmp = stk.top();
+                stk.pop();
+                ans = stk.top() - tmp;
+                stk.pop();
+                stk.push(ans);
+            }
+            else if(tokens[i][0] == '*') {
+//cout << "get * " << endl;
+                tmp = stk.top();
+                stk.pop();
+                ans = stk.top() * tmp;
+                stk.pop();
+                stk.push(ans);
+            }
+            else if(tokens[i][0] == '/') {
+//cout << "get / " << endl;
+                tmp = stk.top();
+                stk.pop();
+                ans = stk.top() / tmp;
+                stk.pop();
+                stk.push(ans);
+            }
+            else if(tokens[i][0] == '-') {
+                int j = 1;
+                tmp = 0;
+                while(tokens[i][j] != '\0') {
+                    tmp *= 10;
+                    tmp += (tokens[i][j] - '0');
+                    j++;
+                }
+                tmp *= -1;
+                stk.push(tmp);
+//cout << "get num " << tmp << endl;
+            }
+            else {
+                int j = 0;
+                tmp = 0;
+                while(tokens[i][j] != '\0') {
+                    tmp *= 10;
+                    tmp += (tokens[i][j] - '0');
+                    j++;
+                }
+                stk.push(tmp);
+//cout << "get num " << tmp << endl;
+            }
+        }
+        return stk.top();
+    }
+};

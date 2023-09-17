@@ -1,0 +1,49 @@
+对于窗口值很大的情况，会导致重合窗口很长的数组被不断地遍历一遍又一遍，O(n^2)的时间。
+看了题解后，发现解题思路想到了差不多的，但是想不出来我的方法怎么快捷实现。我有发现，将每一个数据包含其在内，左边k个，所有比自身小的数换成自己，就是结果，（去掉最后的k-1个），但我我想的改变数的值，仍旧是从这个数往左遍历来改。
+发现题解是用的单调队列的思想，我所没想到的方法，是队列里将左侧较小的数pop掉后，数组仍旧一位一位的移动，每移动一次，就会把队列出口复制输出一次，因为队列长度最大为k，所以每个数只会对左侧k个数施加影响。每当右边出现新的更大的数时，就把左边的数pop掉，复制输出的也是新的更大的数。
+发现了我想用队列和栈没想出来的原因，题解用的deque，用了pop_front和pop_back。队列能popback，就很好实现单调队列了。一直popback直到前面的数比自己的数大，这个方法完全没有想到过，一直想用经典的队列只能pop_front来想，就无法解决这个问题。
+题解用这个方法生成一个单调递减队列，然后通过判断数组内对应元素是否与队列出口元素相同，来决定是否pop。每一次数组走一次，都输出一次队列出口。
+
+class Solution {
+public:
+    int get_max_add(vector<int>& nums ,int left, int right) {
+        int max = -10000;
+        int add = 0;
+        for(int i = left; i < right + 1; ++i) {
+            if(nums[i] >= max) {
+                max = nums[i];
+                add = i;
+            }
+        }
+        return add;
+    }
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> ans;
+        int left = 0;
+        int right = k - 1;
+        int max_add = get_max_add(nums, left, right);
+        ans.push_back(nums[max_add]);
+        while(right < nums.size() - 1) {
+            while(left < max_add && right < nums.size() - 1) {
+                if(nums[right + 1] < nums[max_add]) {
+                    ans.push_back(nums[max_add]);
+                    left++;
+                    right++;
+                }
+                else {
+                    max_add = right + 1;
+                    ans.push_back(nums[max_add]);
+                    left++;
+                    right++;
+                }
+            }
+            if(left == max_add && right < nums.size() - 1) {
+                max_add = get_max_add(nums, left + 1, right + 1);
+                ans.push_back(nums[max_add]);
+                left++;
+                right++;
+            }
+        }
+        return ans;
+    }
+};
