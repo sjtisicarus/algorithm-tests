@@ -1,0 +1,43 @@
+前面都是层序，也就继续写的层序
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        TreeNode* tmp0;
+        TreeNode* tmp1;
+        TreeNode* tmp2;
+        queue<TreeNode*> que;
+        if(root != nullptr) {
+            que.push(root);
+        }
+        while(!que.empty()) {
+            tmp0 = que.front();
+            if(tmp0->left && tmp0->right) {
+                tmp1 = tmp0->left;
+                tmp2 = tmp0->right;
+                que.pop();
+                que.push(tmp0->left);
+                que.push(tmp0->right);
+                tmp0->left = tmp2;
+                tmp0->right = tmp1;
+            }
+            else if(tmp0->left && !tmp0->right) {
+                tmp1 = tmp0->left;
+                que.pop();
+                que.push(tmp0->left);
+                tmp0->left = nullptr;
+                tmp0->right = tmp1;
+            }
+            else if(!tmp0->left && tmp0->right) {
+                tmp2 = tmp0->right;
+                que.pop();
+                que.push(tmp0->right);
+                tmp0->left = tmp2;
+                tmp0->right = nullptr;
+            }
+            else {
+                que.pop();
+            }
+        }
+        return root;
+    }
+};

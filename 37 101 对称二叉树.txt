@@ -1,0 +1,121 @@
+还是用队列层序
+判断左右节点是否为空的四种情况的简便方法可以学习下题解，我写的太丑陋了。
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root == nullptr) {
+            return 0;
+        }
+        else {
+            if(root->left == nullptr && root->right == nullptr) {
+                return 1;
+            }
+            else if(root->left == nullptr && root->right != nullptr) {
+                return 0;
+            }
+            else if(root->left != nullptr && root->right == nullptr) {
+                return 0;
+            }
+            else if(root->left->val != root->right->val) {
+                return 0;
+            }
+            else {
+                queue<TreeNode*> que1;
+                queue<TreeNode*> que2;
+                TreeNode* tmp1;
+                TreeNode* tmp2;
+                que1.push(root->left);
+                que2.push(root->right);
+                while(!que1.empty() && !que2.empty()) {
+                    tmp1 = que1.front();
+                    tmp2 = que2.front();
+                    que1.pop();
+                    que2.pop();
+                    if(tmp1->val != tmp2->val) {
+                        return 0;
+                    }
+                    else if(tmp1->left && !tmp2->right) {
+                        return 0;
+                    }
+                    else if(tmp1->right && !tmp2->left) {
+                        return 0;
+                    }
+                    else if(!tmp1->left && tmp2->right) {
+                        return 0;
+                    }
+                    else if(!tmp1->right && tmp2->left) {
+                        return 0;
+                    }
+                    else {
+                        if(tmp1->left) {
+                            que1.push(tmp1->left);
+                        }
+                        if(tmp1->right) {
+                            que1.push(tmp1->right);
+                        }
+                        if(tmp2->right) {
+                            que2.push(tmp2->right);
+                        }
+                        if(tmp2->left) {
+                            que2.push(tmp2->left);
+                        }
+                    }
+                }
+                return 1;
+            }
+        }
+    }
+};
+
+题解的简单的递归法，我尽量避免使用递归
+class Solution {
+public:
+    bool compare(TreeNode* left, TreeNode* right) {
+        // 首先排除空节点的情况
+        if (left == NULL && right != NULL) return false;
+        else if (left != NULL && right == NULL) return false;
+        else if (left == NULL && right == NULL) return true;
+        // 排除了空节点，再排除数值不相同的情况
+        else if (left->val != right->val) return false;
+
+        // 此时就是：左右节点都不为空，且数值相同的情况
+        // 此时才做递归，做下一层的判断
+        bool outside = compare(left->left, right->right);   // 左子树：左、 右子树：右
+        bool inside = compare(left->right, right->left);    // 左子树：右、 右子树：左
+        bool isSame = outside && inside;                    // 左子树：中、 右子树：中 （逻辑处理）
+        return isSame;
+
+    }
+    bool isSymmetric(TreeNode* root) {
+        if (root == NULL) return true;
+        return compare(root->left, root->right);
+    }
+};
+题解的用单个队列的层序遍历
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (root == NULL) return true;
+        queue<TreeNode*> que;
+        que.push(root->left);   // 将左子树头结点加入队列
+        que.push(root->right);  // 将右子树头结点加入队列
+        
+        while (!que.empty()) {  // 接下来就要判断这两个树是否相互翻转
+            TreeNode* leftNode = que.front(); que.pop();
+            TreeNode* rightNode = que.front(); que.pop();
+            if (!leftNode && !rightNode) {  // 左节点为空、右节点为空，此时说明是对称的
+                continue;
+            }
+
+            // 左右一个节点不为空，或者都不为空但数值不相同，返回false
+            if ((!leftNode || !rightNode || (leftNode->val != rightNode->val))) {
+                return false;
+            }
+            que.push(leftNode->left);   // 加入左节点左孩子
+            que.push(rightNode->right); // 加入右节点右孩子
+            que.push(leftNode->right);  // 加入左节点右孩子
+            que.push(rightNode->left);  // 加入右节点左孩子
+        }
+        return true;
+    }
+};

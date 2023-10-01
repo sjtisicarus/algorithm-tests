@@ -1,0 +1,28 @@
+递归
+题解更简化在于，将高度返回值用-1来表示这个子树不平衡，于是只要子树有-1.自身高度也改为-1，这样可以节省掉flag的参数。
+class Solution {
+public:
+    int getHeight(TreeNode* root, bool &flag) {
+        if(flag == 1) {
+            if(root == nullptr) {
+                return 0;
+            }
+            int left_higth = getHeight(root->left, flag);
+            int right_higth = getHeight(root->right, flag);
+            int diffhighth = left_higth - right_higth;
+            if(diffhighth > 1 || diffhighth < -1) {
+                flag = 0;
+            }
+            return max(left_higth, right_higth) + 1;
+        }
+        else {
+            //flag = 0;
+            return 0;
+        }
+    }
+    bool isBalanced(TreeNode* root) {//递归
+        bool flag1 = 1;
+        int height1 = getHeight(root, flag1);
+        return flag1;
+    }
+};

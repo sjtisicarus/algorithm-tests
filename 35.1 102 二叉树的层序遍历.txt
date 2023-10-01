@@ -1,0 +1,71 @@
+没想到用size来保存一层初始时候队列里的元素个数，再用for循环来对一层做工作，而只想到再给一个while循环，结果怎样一层一层的来没想出来。双重数组的vector怎么添加vector也没想明白，几天没练脑子生锈了。
+
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> que;
+        if (root != NULL) que.push(root);
+        vector<vector<int>> result;
+        while (!que.empty()) {
+            int size = que.size();
+            vector<int> vec;
+            // 这里一定要使用固定大小size，不要使用que.size()，因为que.size是不断变化的
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+                vec.push_back(node->val);
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+            }
+            result.push_back(vec);
+        }
+        return result;
+    }
+};
+
+递归
+class Solution {
+public:
+    void order(TreeNode* cur, vector<vector<int>>& result, int depth)
+    {
+        if (cur == nullptr) return;
+        if (result.size() == depth) result.push_back(vector<int>());
+        result[depth].push_back(cur->val);
+        order(cur->left, result, depth + 1);
+        order(cur->right, result, depth + 1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        int depth = 0;
+        order(root, result, depth);
+        return result;
+    }
+};
+
+符合自己习惯的写法
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> que;
+        if (root != NULL) {
+            que.push(root);
+        }
+        vector<vector<int>> result;
+        vector<int> tmp_vec;
+        TreeNode* tmp_node;
+        int size = 0;
+        while (!que.empty()) {
+            size = que.size();
+            tmp_vec.clear();
+            for (int i = 0; i < size; i++) {
+                tmp_node = que.front();
+                que.pop();
+                tmp_vec.push_back(tmp_node->val);
+                if (tmp_node->left) que.push(tmp_node->left);
+                if (tmp_node->right) que.push(tmp_node->right);
+            }
+            result.push_back(tmp_vec);
+        }
+        return result;
+    }
+};
