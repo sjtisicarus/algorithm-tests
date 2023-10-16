@@ -1,0 +1,36 @@
+经典二叉搜索树，递归
+
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if (root == NULL || root->val == val) return root;
+        TreeNode* result = NULL;
+        if (root->val > val) result = searchBST(root->left, val);
+        if (root->val < val) result = searchBST(root->right, val);
+        return result;
+    }
+};
+
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if (root == NULL || root->val == val) return root;
+        if (root->val > val) return searchBST(root->left, val);
+        if (root->val < val) return searchBST(root->right, val);
+        return NULL;
+    }
+};
+
+迭代
+二叉搜索树的搜索不涉及回溯，所以不用栈或者队列来保存节点，可以直接迭代。
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        while (root != NULL) {
+            if (root->val > val) root = root->left;
+            else if (root->val < val) root = root->right;
+            else return root;
+        }
+        return NULL;
+    }
+};
